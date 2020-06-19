@@ -13,61 +13,28 @@ class Login extends Component{
         super(props);
 
         this.state = {
-            username:'',
+            email:'',
             password:''
         }
 
     }
 
     handleClick(event){
-        const proxy = "https://cors-anywhere.herokuapp.com/"
-        var apiBaseUrl = "https://notifynow-api.herokuapp.com/admin/login/";
-        
-        
-        var csrftoken = '';
-        axios.get(proxy + apiBaseUrl, this.state)
+        var apiBaseUrl = "https://notifynow-api.herokuapp.com/api/users/token/";
+        axios.post(apiBaseUrl, this.state)
         .then(function (response) {
-          console.log('Check response')
-          console.log(response);
-          console.log(response.status)
-          
         if(response.status == 200){
-        console.log('Inside 200')
-        csrftoken = response.cookies['csrftoken'];
-        console.log(response)
-        console.log(csrftoken);
-        
+        var token = 'token '+response.data.token;
+        localStorage.setItem('Token', token);
+        console.log(localStorage.getItem('Token'))
         }
-        else if(response.data.code == 204){
-        console.log("Username password do not match");
-        alert("username password do not match")
+        else if(response.status == 204){
+        console.log("email password do not match");
+        alert("email password do not match")
         }
         else{
-        console.log("Username does not exists");
-        alert("Username does not exist");
-        }
-        })
-        .catch(function (error) {
-        console.log(error);
-        });
-
-        axios.defaults.headers.common['X-CSRFToken'] = csrftoken;
-        
-
-        axios.post(proxy + apiBaseUrl, this.state)
-        .then(function (response) {
-        console.log(response);
-        if(response.data.code == 200){
-        console.log("Login successfull");
-        
-        }
-        else if(response.data.code == 204){
-        console.log("Username password do not match");
-        alert("username password do not match")
-        }
-        else{
-        console.log("Username does not exists");
-        alert("Username does not exist");
+        console.log("email does not exists");
+        alert("email does not exist");
         }
         })
         .catch(function (error) {
@@ -85,9 +52,9 @@ class Login extends Component{
              title="Login"
            />
            <TextField
-             hintText="Enter your username"
-             floatingLabelText="username"
-             onChange = {(event,newValue) => this.setState({username:newValue})}
+             hintText="Enter your email"
+             floatingLabelText="email"
+             onChange = {(event,newValue) => this.setState({email:newValue})}
              />
            <br/>
              <TextField

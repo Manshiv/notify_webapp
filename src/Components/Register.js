@@ -18,17 +18,11 @@ class Register extends Component {
   }
 
   handleClick(event){
-    const proxy = "https://cors-anywhere.herokuapp.com/"
     var apiBaseUrl = "https://notifynow-api.herokuapp.com/api/users/create/";
     console.log("values",this.state.name,this.state.phone_number,this.state.email,this.state.password);
     //To be done:check for empty values before hitting submit
     var self = this;
-    var headers= {
-      'Content-Type': 'application/x-www-form-urlencoded',
-      'Access-Control-Allow-Origin': '*'
-   }
-    
-    axios.post(proxy + apiBaseUrl,this.state)
+    axios.post(apiBaseUrl,this.state)
    .then(function (response) {
      console.log(response);
      if(response.data.code == 201){
