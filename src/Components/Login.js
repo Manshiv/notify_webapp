@@ -1,12 +1,10 @@
 import React, {Component} from 'react'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import AppBar from 'material-ui/AppBar';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 import axios from 'axios';
-import UploadScreen from 'react-bootstrap'
-
-
+import {Redirect, browserHistory} from 'react-router';
+import CommonAppBar from './CommonAppBar';
 
 class Login extends Component{
     constructor(props) {
@@ -14,31 +12,37 @@ class Login extends Component{
 
         this.state = {
             email:'',
-            password:''
+            password:'',
         }
 
     }
 
     handleClick(event){
         var apiBaseUrl = "https://notifynow-api.herokuapp.com/api/users/token/";
-        axios.post(apiBaseUrl, this.state)
+        var payload = {
+          'email': this.state.email,
+          'password': this.state.password
+        }
+        axios.post(apiBaseUrl, payload)
         .then(function (response) {
         if(response.status == 200){
-        var token = 'token '+response.data.token;
-        localStorage.setItem('Token', token);
-        console.log(localStorage.getItem('Token'))
+          var token = 'token '+response.data.token;
+          localStorage.setItem('Token', token);
+          console.log(localStorage.getItem('Token'))
+          browserHistory.push('/forwarder')
+          
         }
         else if(response.status == 204){
-        console.log("email password do not match");
-        alert("email password do not match")
+          console.log("email password do not match");
+          alert("email password do not match");
         }
         else{
-        console.log("email does not exists");
-        alert("email does not exist");
+          console.log("email does not exists");
+          alert("email does not exist");
         }
         })
         .catch(function (error) {
-        console.log(error);
+          console.log(error);
         });
         }
 
@@ -46,28 +50,26 @@ class Login extends Component{
     render(){
         return(
             <div>
-        <MuiThemeProvider>
-          <div>
-          <AppBar
-             title="Login"
-           />
-           <TextField
-             hintText="Enter your email"
-             floatingLabelText="email"
-             onChange = {(event,newValue) => this.setState({email:newValue})}
-             />
-           <br/>
-             <TextField
-               type="password"
-               hintText="Enter your Password"
-               floatingLabelText="Password"
-               onChange = {(event,newValue) => this.setState({password:newValue})}
-               />
-             <br/>
-             <RaisedButton label="Submit" primary={true} style={style} onClick={(event) => this.handleClick(event)}/>
-         </div>
-         </MuiThemeProvider>
-      </div>
+              <CommonAppBar title='Login' />
+              <MuiThemeProvider>
+                <div>
+                  <TextField
+                    hintText="Enter your email"
+                    floatingLabelText="Email"
+                    onChange = {(event,newValue) => this.setState({email:newValue})}
+                    />
+                  <br/>
+                  <TextField
+                    type="password"
+                    hintText="Enter your Password"
+                    floatingLabelText="Password"
+                    onChange = {(event,newValue) => this.setState({password:newValue})}
+                    />
+                  <br/>
+                  <RaisedButton label="Submit" primary={true} style={style} onClick={(event) => this.handleClick(event)}/>
+                </div>
+                </MuiThemeProvider>
+              </div>
         )
     }
 }

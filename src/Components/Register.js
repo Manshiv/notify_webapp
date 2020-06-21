@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import AppBar from 'material-ui/AppBar';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 import axios from 'axios';
 import Login from './Login'
+import CommonAppBar from './CommonAppBar'
 class Register extends Component {
 
   constructor(props){
@@ -25,7 +25,7 @@ class Register extends Component {
     axios.post(apiBaseUrl,this.state)
    .then(function (response) {
      console.log(response);
-     if(response.data.code == 201){
+     if(response.status == 201){
        var loginscreen=[];
        loginscreen.push(<Login parentContext={this}/>);
        var loginmessage = "Not Registered yet.Go to registration";
@@ -45,11 +45,9 @@ class Register extends Component {
   render() {
     return (
       <div>
+        <CommonAppBar title='Register' />
         <MuiThemeProvider>
           <div>
-          <AppBar
-             title="Register"
-           />
            <TextField
              hintText="Enter your Full Name"
              floatingLabelText="Full Name"
