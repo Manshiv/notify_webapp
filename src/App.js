@@ -5,6 +5,7 @@ import Notifications from './Components/Notifications'
 import SignIn from './Components/SignIn'
 import Home from './Components/Home'
 import SignUp from './Components/SignUp'
+import User from './Components/User'
 import { BrowserRouter as Router , Switch, Route } from 'react-router-dom'
 
 function App() {
@@ -15,6 +16,7 @@ function App() {
           <Route path='/home' excat component={Home} />
           <Route path='/signin' exact component={SignIn}/>
           <Route path='/signup' exact component={SignUp} />
+          <Route path='/user' exact component={User} />
           <Route path='/forwarder' exact component={GmailForwarder} />
           <Route path='/notifications' exact component={Notifications} />
         </Switch>

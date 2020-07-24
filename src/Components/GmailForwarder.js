@@ -1,12 +1,10 @@
 import React, {Component} from 'react';
 import { flexbox, compose } from '@material-ui/system';
 import CommonAppBar from './CommonAppBar'
-import { Button } from '@material-ui/core';
 import axios from 'axios';
-import Typography from 'material-ui/styles/typography';
 import { AwesomeButtonProgress } from "react-awesome-button";
 import "react-awesome-button/dist/styles.css";
-import AwesomeButtonStyles from 'react-awesome-button/src/styles/styles.scss'
+import {Alert} from "react-alert"
 
 
 
@@ -22,7 +20,7 @@ class GmailForwarder extends Component{
     }
 
     
-    async handleClick(event){
+    handleClick(event){
         var apiBaseUrl = "https://notifynow-api.herokuapp.com/api/user_mails/";
         const for_email_add = "forwarding-noreply@google.com"
         //event.preventDefault();
@@ -48,7 +46,8 @@ class GmailForwarder extends Component{
             var mail_with_code = JSON.parse((temp_mail.user_mail))
             var code = mail_with_code.subject.match(/\(([^)]+)\)/)[1].replace('#', '');
             if (code){
-                window.alert('Your verification code ' +code)
+                alert('Your verification code ' +code)
+                console.log("done")
             }
             
         }
