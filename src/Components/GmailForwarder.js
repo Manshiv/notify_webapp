@@ -4,7 +4,6 @@ import CommonAppBar from './CommonAppBar'
 import axios from 'axios';
 import { AwesomeButtonProgress } from "react-awesome-button";
 import "react-awesome-button/dist/styles.css";
-import {Alert} from "react-alert"
 
 
 
