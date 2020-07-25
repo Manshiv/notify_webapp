@@ -85,7 +85,7 @@ class SignIn extends Component{
 
     render(){
         if (localStorage.getItem('Token')){
-            return <Redirect to='/notifications'/>
+            return <Redirect to='/consents'/>
           }
         const { classes } = this.props;
         const  { email, password } = this.state;

@@ -89,12 +89,11 @@ const useStyles = theme => ({
 
     render(){
         if (localStorage.getItem('Token')){
-          return <Redirect to='/notifications'/>
+          return <Redirect to='/consents'/>
         }
         const { classes } = this.props;
         const  { name, phone_number, email, password } = this.state;
         return (
-          <div>
             <Container component="main" maxWidth="xs">
               <div className={classes.paper}>
               <Avatar className={classes.avatar}>
@@ -171,7 +170,7 @@ const useStyles = theme => ({
                   </Button>
                   <Grid container justify="flex-end">
                     <Grid item>
-                      <Link href="/signin" variant="body2">
+                      <Link href="/login" variant="body2">
                         Already have an account? Sign in
                       </Link>
                     </Grid>
@@ -179,7 +178,6 @@ const useStyles = theme => ({
                 </form>
               </div>
             </Container>
-            </div>
           );
     }
   }
