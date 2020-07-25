@@ -89,7 +89,7 @@ const useStyles = theme => ({
 
     render(){
         if (localStorage.getItem('Token')){
-          return <Redirect to='/consents'/>
+          return <Redirect to='/forwarder'/>
         }
         const { classes } = this.props;
         const  { name, phone_number, email, password } = this.state;
