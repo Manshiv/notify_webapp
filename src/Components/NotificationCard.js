@@ -10,6 +10,8 @@ import Typography from '@material-ui/core/Typography';
 import PropTypes from 'prop-types';
 import netflix_logo from '../images/netflix_logo.png'
 import prime_logo from '../images/prime_logo.png'
+import axios from 'axios';
+import { Redirect } from "react-router-dom";
 
 
 const useStyles = theme => ({
@@ -24,12 +26,34 @@ class NotificationCard extends Component{
 
   constructor(props){
     super(props)
+    this.state = {
+      navigate:false,
+      consent_id:null
+    }
+    this.handleClick = this.handleClick.bind(this)
   }
     
+  
+  handleClick(event){
+    var consent_id = this.props.id;
+    console.log(consent_id)
+    this.setState({'navigate':true, 'consent_id':consent_id})
+    
+  }
+
   render(){
     const { classes } = this.props;
-    const logos= {'Amazon': prime_logo, 'Netflix': netflix_logo}
+    const logos= {'Prime Video': prime_logo, 'Netflix': netflix_logo}
     var logo = logos[this.props.title]
+    console.log(this.state) 
+    if (this.state.navigate){
+      return(
+      <Redirect
+        to={{
+         pathname:'/consents',
+         state:{ id: this.state.consent_id } 
+         }}
+         />)}
     return(
       <div>
           <Card className={classes.root}>
@@ -46,7 +70,10 @@ class NotificationCard extends Component{
               </CardContent>
             </CardActionArea>
             <CardActions>
-              <Button size="small" color="primary">
+              <Button 
+              size="small" 
+              color="primary"
+              onClick={(event) => this.handleClick(event)}>
                 Set Consents
               </Button>
             </CardActions>

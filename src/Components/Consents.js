@@ -10,16 +10,22 @@ class Consents extends Component{
         this.state = {
             whatsapp:true,
             chrome_ext:true,
+            id:null,
+            notification_type:null
         }
         this.handleClick = this.handleClick.bind(this)
         this.make_change = this.make_change.bind(this)
     }
 
     make_change(){
-        var apiBaseUrl = "https://notifynow-api.herokuapp.com/api/consents/";
+        var apiBaseUrl = `https://notifynow-api.herokuapp.com/api/consents/${this.state.id}/`;
         console.log(localStorage.getItem('Token'))
-        var headers = {'Authorization': localStorage.getItem('Token')}
-        axios.post(apiBaseUrl,headers=headers, this.state)
+        console.log(this.state)
+        console.log(apiBaseUrl)
+        var payload = {'chrome_ext':true}
+        axios.defaults.headers.common['Authorization'] = localStorage.getItem('Token');
+        //var headers = {'Authorization': localStorage.getItem('Token')}
+        axios.patch(apiBaseUrl, this.state)
         .then(function (response) {
         if(response.status == 200){ 
             console.log(response)
@@ -37,14 +43,17 @@ class Consents extends Component{
 
     componentDidMount(){
         const that = this;
+        const notification_id = this.props.location.state.id
         var apiBaseUrl = "https://notifynow-api.herokuapp.com/api/consents/";
-        console.log(localStorage.getItem('Token'))
         var headers = {'Authorization': localStorage.getItem('Token')}
         axios.get(apiBaseUrl,headers=headers)
         .then(function (response) {
         if(response.status == 200){ 
-            console.log(response.data)
-            that.setState({'whatsapp':response.data[0].whatsapp, 'chrome_ext': response.data[0].chrome_ext})
+            console.log('Consents data')    
+            console.log(localStorage.getItem('Token'))
+            console.log('consents response ' +response.data)
+            var consent_data = response.data.find(item =>  item.notification_type == notification_id)
+            that.setState({'whatsapp':consent_data.whatsapp, 'chrome_ext': consent_data.chrome_ext, 'id':consent_data.id, 'notification_type':consent_data.notification_type})
         }
         })
         .catch(function (error) {
@@ -54,8 +63,9 @@ class Consents extends Component{
     
     render(){
         return (
+            
             <div>
-                <CommonAppBar title='Notifications' />
+                <CommonAppBar title='Consents' />
                 <table >
                   <tr>
                       <td>

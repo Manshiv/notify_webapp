@@ -18,10 +18,10 @@ class Notifications extends Component{
         var apiBaseUrl = "https://notifynow-api.herokuapp.com/api/notifications/";
         console.log(localStorage.getItem('Token'))
         var headers = {'Authorization': localStorage.getItem('Token')}
+        console.log(headers)
         axios.get(apiBaseUrl,headers=headers)
         .then(function (response) {
         if(response.status == 200){ 
-            console.log(response.data)
             that.setState({'notifications':response.data})
         }
         })
@@ -31,13 +31,12 @@ class Notifications extends Component{
     }
 
     renderCards(){
-        console.log(this.state.notifications)
         return this.state.notifications.map((item) =>(
             <Grid item xs={6}>
-                <NotificationCard title={item.notification_type}/>
-            </Grid>
-          
-        ));
+                <NotificationCard title={item.notification_type} id={item.id}/>
+            </Grid> 
+        )
+        );
       }
 
    
