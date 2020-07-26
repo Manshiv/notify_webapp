@@ -65,9 +65,7 @@ class SignIn extends Component{
         if(response.status == 200){
           var token = 'token '+response.data.token;
           localStorage.setItem('Token', token);
-          console.log(localStorage.getItem('Token'));
           window.location.reload(); 
-          // history.push('/notifications')
         }
         else if(response.status == 204){
           console.log("email password do not match");

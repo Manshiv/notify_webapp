@@ -44,32 +44,81 @@ const useStyles = theme => ({
           email:'',
           password:''
         }
-      } 
+        this.handleClick = this.handleClick.bind(this);
+        this.create_consents = this.create_consents.bind(this);       
+      }
+
+    create_consents(email, user_id){
+      console.log('creating consents')
+      var notifs = ['Netflix', 'Prime Video'];
+      var notifications_url = "https://notifynow-api.herokuapp.com/api/notifications/"
+      axios.defaults.headers.common['Authorization'] = localStorage.getItem('Token');
+      // console.log(localStorage.getItem('Token'))
+      // console.log('Calling '+notifications_url)
+      // axios.get(notifications_url)
+      // .then(function (response) {
+      //   console.log(response.data)
+      //   console.log('Notif res ' + response.data)
+      //     if(response.status == 200){
+      //     response.data.forEach(el => {
+      //       notifs.push(el.notification_type)
+      //     });
+      // }
+      //   })
+      //   .catch(function (error) {
+      //     console.log('Error in notifications')
+      //     console.log(error);
+      //   });
+      
+      var consents_url = "https://notifynow-api.herokuapp.com/api/consents/"
+      console.log('Consent '+consents_url)
+      console.log(notifs)
+      for (var index=0; index < notifs.length; index++){
+        var payload = {
+          'user':user_id,
+          'whatsapp':true,
+          'chrome_ext':true,
+          'notification_type': notifs[index]
+        }
+        console.log(payload)
+        axios.post(consents_url, payload)
+        .then(function (response) {
+          console.log(response.data)
+            if(response.status == 200){
+              console.log(response.data)
+        }
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+
+      }
+    }
+    
 
     handleClick(event){
+        const that=this;
+        var user_id = null
         var apiBaseUrl = "https://notifynow-api.herokuapp.com/api/users/create/";
         event.preventDefault();
-        console.log(this.state);
         var payload = {
             'name': this.state.name,
             'phone_number': this.state.phone_number,
             'email': this.state.email,
             'password': this.state.password
         }
-
         axios.post(apiBaseUrl,payload)
        .then(function (response) {
          if(response.status == 201){
-           console.log('calling token')
+           user_id = response.data.id;
            var input = {'email': payload.email, 'password': payload.password}
            var token_url = "https://notifynow-api.herokuapp.com/api/users/token/";
-           console.log(input)
            axios.post(token_url,input)
           .then(function (response) {
              if(response.status == 200){
               var token = 'token '+response.data.token;
               localStorage.setItem('Token', token);
-              console.log(localStorage.getItem('Token'));
+              that.create_consents(payload.email, user_id);
               window.location.reload(); 
           }
         })
@@ -81,6 +130,7 @@ const useStyles = theme => ({
        .catch(function (error) {
          console.log(error);
        });
+       
       }
 
       onChange = (event) => {
@@ -89,12 +139,11 @@ const useStyles = theme => ({
 
     render(){
         if (localStorage.getItem('Token')){
-          return <Redirect to='/notifications'/>
+          return <Redirect to='/forwarder'/>
         }
         const { classes } = this.props;
         const  { name, phone_number, email, password } = this.state;
         return (
-          <div>
             <Container component="main" maxWidth="xs">
               <div className={classes.paper}>
               <Avatar className={classes.avatar}>
@@ -171,7 +220,7 @@ const useStyles = theme => ({
                   </Button>
                   <Grid container justify="flex-end">
                     <Grid item>
-                      <Link href="/signin" variant="body2">
+                      <Link href="/login" variant="body2">
                         Already have an account? Sign in
                       </Link>
                     </Grid>
@@ -179,7 +228,6 @@ const useStyles = theme => ({
                 </form>
               </div>
             </Container>
-            </div>
           );
     }
   }

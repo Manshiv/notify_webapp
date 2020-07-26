@@ -3,7 +3,6 @@ import { flexbox, compose } from '@material-ui/system';
 import CommonAppBar from './CommonAppBar'
 import axios from 'axios';
 import { AwesomeButtonProgress } from "react-awesome-button";
-import "react-awesome-button/dist/styles.css";
 
 
 
@@ -22,7 +21,6 @@ class GmailForwarder extends Component{
     handleClick(event){
         var apiBaseUrl = "https://notifynow-api.herokuapp.com/api/user_mails/";
         const for_email_add = "forwarding-noreply@google.com"
-        //event.preventDefault();
         var headers = {'Authorization': localStorage.getItem('Token')}
         axios.get(apiBaseUrl,headers=headers)
         .then(function (response) {

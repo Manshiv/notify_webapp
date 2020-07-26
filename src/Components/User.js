@@ -3,7 +3,6 @@ import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
-import Box from '@material-ui/core/Box';
 import {green} from '@material-ui/core/colors';
 import AssignmentIcon from '@material-ui/icons/Assignment'
 import Container from '@material-ui/core/Container';
@@ -57,11 +56,10 @@ const useStyles = theme => ({
             'email': this.state.email,
         }
         console.log(apiBaseUrl)
-        axios.put(apiBaseUrl,payload)
+        axios.patch(apiBaseUrl,payload)
        .then(function (response) {
-           console.log(response)
-         if(response.status == 201){
-           
+         if(response.status == 200){
+           alert('Changes have been saved');
          }
        })
        .catch(function (error) {
@@ -75,14 +73,14 @@ const useStyles = theme => ({
 
     componentDidMount(){
         const that = this;
-        var apiBaseUrl = "https://notifynow-api.herokuapp.com/api/users/";
+        var apiBaseUrl = "https://notifynow-api.herokuapp.com/api/users/1/";
         console.log(localStorage.getItem('Token'))
         var headers = {'Authorization': localStorage.getItem('Token')}
         axios.get(apiBaseUrl,headers=headers)
         .then(function (response) {
         if(response.status == 200){   
             // Fix this once vayu fix the issue  
-            var data = response.data[4]
+            var data = response.data
             console.log(data)
             that.setState({'name': data.name, 'email':data.email, 'phone_number':data.phone_number, 'id':data.id})
           
