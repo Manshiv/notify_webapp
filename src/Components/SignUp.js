@@ -45,12 +45,30 @@ const useStyles = theme => ({
           password:''
         }
         this.handleClick = this.handleClick.bind(this);
-        this.create_consents = this.create_consents.bind(this);       
+        this.create_consents = this.create_consents.bind(this);  
+        this.make_api_call = this.make_api_call.bind(this);     
       }
 
-    create_consents(email, user_id){
+    make_api_call(url, payload){
+      console.log('make api consent call')
+      axios.defaults.headers.common['Authorization'] = localStorage.getItem('Token');
+      console.log(localStorage.getItem('Token'));
+      axios.post(url,payload)
+        .then(function (response) {
+          console.log('Consent data '+response.data)
+            if(response.status == 201){
+            console.log('Successfull')
+        }
+      })
+        .catch(function (error) {
+          console.log('Error for post consent')
+          console.log(error);
+        });
+    }
+
+    create_consents(user_id){
       console.log('creating consents')
-      var notifs = ['Netflix', 'Prime Video'];
+      var notifs = [1, 2];
       var notifications_url = "https://notifynow-api.herokuapp.com/api/notifications/"
       axios.defaults.headers.common['Authorization'] = localStorage.getItem('Token');
       // console.log(localStorage.getItem('Token'))
@@ -74,31 +92,23 @@ const useStyles = theme => ({
       console.log('Consent '+consents_url)
       console.log(notifs)
       for (var index=0; index < notifs.length; index++){
+        console.log(notifs[index])
         var payload = {
           'user':user_id,
           'whatsapp':true,
           'chrome_ext':true,
           'notification_type': notifs[index]
         }
-        console.log(payload)
-        axios.post(consents_url, payload)
-        .then(function (response) {
-          console.log(response.data)
-            if(response.status == 200){
-              console.log(response.data)
-        }
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
-
+        console.log('Consent payload - ' + payload)
+        console.log('this - ' +this)
+        this.make_api_call(consents_url, payload)
       }
     }
     
 
     handleClick(event){
         const that=this;
-        var user_id = null
+        var user_id = null;
         var apiBaseUrl = "https://notifynow-api.herokuapp.com/api/users/create/";
         event.preventDefault();
         var payload = {
@@ -118,8 +128,6 @@ const useStyles = theme => ({
              if(response.status == 200){
               var token = 'token '+response.data.token;
               localStorage.setItem('Token', token);
-              that.create_consents(payload.email, user_id);
-              window.location.reload(); 
           }
         })
         .catch(function (error) {
@@ -130,7 +138,8 @@ const useStyles = theme => ({
        .catch(function (error) {
          console.log(error);
        });
-       
+      that.create_consents(user_id);
+      window.location.reload(); 
       }
 
       onChange = (event) => {
