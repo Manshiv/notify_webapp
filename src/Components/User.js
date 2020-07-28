@@ -43,6 +43,7 @@ const useStyles = theme => ({
           email:'',
           id:''
         }
+        console.log(this.props.location.user_id)
       } 
 
     handleClick(event){
@@ -73,13 +74,13 @@ const useStyles = theme => ({
 
     componentDidMount(){
         const that = this;
-        var apiBaseUrl = "https://notifynow-api.herokuapp.com/api/users/1/";
+        var user_id = localStorage.getItem('User Id')
+        var apiBaseUrl = `https://notifynow-api.herokuapp.com/api/users/${user_id}/`;
         console.log(localStorage.getItem('Token'))
         var headers = {'Authorization': localStorage.getItem('Token')}
         axios.get(apiBaseUrl,headers=headers)
         .then(function (response) {
         if(response.status == 200){   
-            // Fix this once vayu fix the issue  
             var data = response.data
             console.log(data)
             that.setState({'name': data.name, 'email':data.email, 'phone_number':data.phone_number, 'id':data.id})

@@ -16,6 +16,8 @@ import {withStyles} from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 import { Redirect } from "react-router-dom";
+import { AwesomeButton } from "react-awesome-button";
+import AwesomeButtonStyles from 'react-awesome-button/src/styles/styles.scss'
 
 const useStyles = theme => ({
     paper: {
@@ -129,15 +131,15 @@ class SignIn extends Component{
                       control={<Checkbox value="remember" color="primary" />}
                       label="Remember me"
                     />
-                    <Button
-                      type="submit"
-                      fullWidth
-                      variant="contained"
-                      color="primary"
-                      className={classes.submit}
-                    >
-                      Sign In
-                    </Button>
+                    
+                    <AwesomeButton
+                    type="primary"
+                    ripple
+                    size='large'
+                    className={classes.submit}
+                  >
+                    Sign in
+                  </AwesomeButton>
                     <Grid container>
                       <Grid item>
                         <Link href="/signup" variant="body2">

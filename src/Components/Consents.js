@@ -2,6 +2,8 @@ import React, {Component} from 'react'
 import Switch from '@material-ui/core/Switch';
 import CommonAppBar from './CommonAppBar'
 import axios from 'axios';
+import Grid from '@material-ui/core/Grid';
+import Typography from '@material-ui/core/Typography';
 
 class Consents extends Component{
 
@@ -15,6 +17,7 @@ class Consents extends Component{
         }
         this.handleClick = this.handleClick.bind(this)
         this.make_change = this.make_change.bind(this)
+        
     }
 
     make_change(){
@@ -62,38 +65,35 @@ class Consents extends Component{
     }
     
     render(){
+        const platform_mapping = {1:'Netflix', 2:'Prime Video'}
+        var platform = platform_mapping[this.props.location.state.id]
+        console.log('id '+this.props.location.state.id)
+        console.log('Platform selection - '+platform)
         return (
             
             <div>
                 <CommonAppBar title='Consents' />
-                <table >
-                  <tr>
-                      <td>
-                          <div>WhatsApp Notification  </div>
-                      </td>
-                      <td>
-                          <Switch
+                <Grid container spacing={2}>
+                    <Grid item xs={5} style={{'margin':'15px'}}>
+                    <Typography>WhatsApp Notification <strong>{platform}</strong></Typography>
+                    <Switch
                           checked={this.state.whatsapp}
                           onChange={(event) => this.handleClick(event)}
                           name="whatsapp"
                           color='primary'
                           />
-                      </td>
-                  </tr>
-                  <tr>
-                      <td>
-                          <div>Google Chrome Extension  </div>
-                      </td>
-                      <td>
-                          <Switch
+                    </Grid>
+                    <Grid item xs={5} style={{'margin':'15px'}}>
+                        <Typography>Google Chrome Extension <strong>{platform}</strong></Typography>
+                         
+                        <Switch
                           checked={this.state.chrome_ext}
                           onChange={(event) => this.handleClick(event)}
                           name="chrome_ext"
                           color='primary'
                           />
-                      </td>
-                  </tr>
-                </table>
+                    </Grid>
+                </Grid>
             </div>   
         );
     }
